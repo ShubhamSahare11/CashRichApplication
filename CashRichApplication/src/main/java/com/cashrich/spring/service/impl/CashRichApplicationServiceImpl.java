@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.cashrich.spring.manager.SessionManager;
+import com.cashrich.spring.mapper.CmcResponseMapper;
 import com.cashrich.spring.mapper.UserDetailsMapper;
 import com.cashrich.spring.model.UserDetails;
 import com.cashrich.spring.repository.UserDetailsRepository;
@@ -43,6 +44,8 @@ public class CashRichApplicationServiceImpl implements CashRichApplicationServic
 	UserDetailsRepository repository;
 	@Autowired
 	UserDetailsMapper mapper;
+	@Autowired
+	CmcResponseMapper responseMapper;
 	@Autowired
 	private SessionManager sessionManager;
 
@@ -121,18 +124,11 @@ public class CashRichApplicationServiceImpl implements CashRichApplicationServic
 
 			response.getBody();
 			CmcResponse responseObj = objMapper.readValue(response.getBody(), CmcResponse.class);
-			Map<String, CoinDetails> data = responseObj.getData();
-			List<MarketDataResponseVo> coinList = new ArrayList<>();
-			data.keySet().forEach(cmcCoin -> {
-				MarketDataResponseVo coin = new MarketDataResponseVo();
-				coin.setRank(data.get(cmcCoin).getRank());
-				coin.setSymbol(data.get(cmcCoin).getSymbol());
-				if (data.get(cmcCoin).getQuote().containsKey("USD")) {
-					coin.setPrice(data.get(cmcCoin).getQuote().get("USD").getPrice());
-					coin.setVolumeHr24(data.get(cmcCoin).getQuote().get("USD").getVolumeHr24());
-				}
-				coinList.add(coin);
-			});
+
+			List<MarketDataResponseVo> coinList = responseMapper.mapCmcResponse(responseObj.getData());
+			if (CollectionUtils.isEmpty(coinList)) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Empty Response");
+			}
 			return ResponseEntity.ok().body(coinList);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();

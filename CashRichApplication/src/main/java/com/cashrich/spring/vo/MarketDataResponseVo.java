@@ -11,10 +11,10 @@ public class MarketDataResponseVo {
 	private String symbol;
 
 	@JsonProperty("price")
-	private Double price;
+	private String price;
 
 	@JsonProperty("volume_24h")
-	private Double volumeHr24;
+	private String volumeHr24;
 
 	public Integer getRank() {
 		return rank;
@@ -32,19 +32,19 @@ public class MarketDataResponseVo {
 		this.symbol = string;
 	}
 
-	public Double getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 
-	public Double getVolumeHr24() {
+	public String getVolumeHr24() {
 		return volumeHr24;
 	}
 
-	public void setVolumeHr24(Double volumeHr24) {
+	public void setVolumeHr24(String volumeHr24) {
 		this.volumeHr24 = volumeHr24;
 	}
 
