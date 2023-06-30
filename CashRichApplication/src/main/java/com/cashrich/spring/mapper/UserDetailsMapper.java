@@ -30,6 +30,11 @@ public class UserDetailsMapper {
 		LoginResponseVo loginResponse = new LoginResponseVo();
 		loginResponse.setSessionId(UUID.randomUUID().toString());
 		loginResponse.setValidTill(new Date(Calendar.getInstance().getTimeInMillis() + (10 * 60 * 1000)).getTime());
+		if (null != userDetails.getFirstName()) {
+			loginResponse.setFullName(userDetails.getFirstName().concat(" ").concat(userDetails.getLastName()));
+		} else {
+			loginResponse.setFullName(userDetails.getLastName());
+		}
 		return loginResponse;
 	}
 }
