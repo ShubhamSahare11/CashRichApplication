@@ -26,6 +26,7 @@ import com.cashrich.spring.mapper.UserDetailsMapper;
 import com.cashrich.spring.model.UserDetails;
 import com.cashrich.spring.repository.UserDetailsRepository;
 import com.cashrich.spring.service.CashRichApplicationService;
+import com.cashrich.spring.utils.Utility;
 import com.cashrich.spring.vo.CmcResponse;
 import com.cashrich.spring.vo.CoinDetails;
 import com.cashrich.spring.vo.LoginResponseVo;
@@ -87,7 +88,7 @@ public class CashRichApplicationServiceImpl implements CashRichApplicationServic
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username/Password does not match");
 			}
 			UserDetails userDetails = user.get();
-			if (!userDetailsLoginVo.getPassword().equals(userDetails.getPassword())) {
+			if (!Utility.verifyPassword(userDetailsLoginVo.getPassword(), userDetails.getPassword())) {
 				logger.info("Password does not match");
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Username/Password does not match");
 			}

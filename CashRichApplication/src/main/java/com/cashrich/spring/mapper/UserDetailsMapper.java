@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 import com.cashrich.spring.model.UserDetails;
+import com.cashrich.spring.utils.Utility;
 import com.cashrich.spring.vo.LoginResponseVo;
 import com.cashrich.spring.vo.UserDetailsVo;
 
@@ -20,7 +21,8 @@ public class UserDetailsMapper {
 		newUser.setDateModified(date);
 		newUser.setFirstName(userDetailsVo.getFirstName());
 		newUser.setLastName(userDetailsVo.getLastName());
-		newUser.setPassword(userDetailsVo.getPassword());
+		String hashPassword = Utility.hashPassword(userDetailsVo.getPassword());
+		newUser.setPassword(hashPassword);
 		newUser.setUserName(userDetailsVo.getUserName());
 
 		return newUser;
